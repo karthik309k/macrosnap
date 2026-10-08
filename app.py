@@ -1,3 +1,5 @@
+import os
+
 import time
 import json
 
@@ -13,11 +15,17 @@ MODEL_NAME = "gemini-3.5-flash"
 
 st.set_page_config(page_title="MacroSnap", page_icon="🥗")
 
-GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
-TWILIO_ACCOUNT_SID = st.secrets["TWILIO_ACCOUNT_SID"]
-TWILIO_AUTH_TOKEN = st.secrets["TWILIO_AUTH_TOKEN"]
-TWILIO_WHATSAPP_FROM = st.secrets["TWILIO_WHATSAPP_FROM"]
-TWILIO_CONTENT_SID = st.secrets["TWILIO_CONTENT_SID"]
+def get_secret(name):
+    # Render uses environment variables; local/Streamlit Cloud use secrets.toml
+    value = os.environ.get(name)
+    return value if value else st.secrets[name]
+
+
+GEMINI_API_KEY = get_secret("GEMINI_API_KEY")
+TWILIO_ACCOUNT_SID = get_secret("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = get_secret("TWILIO_AUTH_TOKEN")
+TWILIO_WHATSAPP_FROM = get_secret("TWILIO_WHATSAPP_FROM")
+TWILIO_CONTENT_SID = get_secret("TWILIO_CONTENT_SID")
 
 
 # Cached so the clients are built once, not on every Streamlit rerun.
